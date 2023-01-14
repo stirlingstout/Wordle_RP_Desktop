@@ -64,7 +64,7 @@ Debug.Assert(ExtraPossibleAnswers.Count == 12546);
 {
     using (var inFile = new System.IO.StreamReader(filename))
     {
-        return inFile.ReadToEnd().Split(Environment.NewLine[1]).ToImmutableList();
+        return inFile.ReadToEnd().ReplaceLineEndings("#").Split("#").ToImmutableList();
     }
 };
 
