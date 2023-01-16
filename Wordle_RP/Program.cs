@@ -42,16 +42,16 @@ static string MarkAttempt(string attempt, string target) =>
         EvaluateGreens(attempt, target).Item2).Item1;
 
 
-static IEnumerable<string> PossibleAnswersAfterAttempt(
-    IEnumerable<string> prior, string attempt, string mark) =>
-        prior.Where(w => MarkAttempt(attempt, w) == mark);
+static ImmutableList<string> PossibleAnswersAfterAttempt(
+    ImmutableList<string> prior, string attempt, string mark) =>
+        prior.Where(w => MarkAttempt(attempt, w) == mark).ToImmutableList();
 
 
-static int WordCountLeftByWorstOutcome(IEnumerable<string> possibleWords, string attempt) =>
+static int WordCountLeftByWorstOutcome(ImmutableList<string> possibleWords, string attempt) =>
     possibleWords.GroupBy(w => MarkAttempt(attempt, w)).Max(g => g.Count());
 
 
-static string BestAttempt(IEnumerable<string> possAnswers, IEnumerable<string> possAttempts) => possAttempts.Select(w => (WordCountLeftByWorstOutcome(possAnswers, w), w)).
+static string BestAttempt(ImmutableList<string> possAnswers, ImmutableList<string> possAttempts) => possAttempts.Select(w => (WordCountLeftByWorstOutcome(possAnswers, w), w)).
            Aggregate((best, x) => (x.Item1 < best.Item1) ||
                (x.Item1 == best.Item1 && possAnswers.Contains(x.Item2)) ? x : best).Item2;
 
@@ -70,7 +70,7 @@ ImmutableList<string> ReadAllWordsFrom(string filename)
 };
 
 // User interface:
-IEnumerable<string> possible = ValidWords;
+ImmutableList<string> possible = ValidWords;
 var outcome = "";
 
 while (outcome != "*****")
