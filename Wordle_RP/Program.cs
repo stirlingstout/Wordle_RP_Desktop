@@ -78,7 +78,7 @@ while (outcome != "*****")
     Stopwatch sw = new();
     sw.Start();
     var attempt = BestAttempt(possible, ValidWords);
-    sw.Stop();
+    sw.Stop(); // 11.98 with all IEnumerable
     Console.WriteLine(attempt);
     outcome = Console.ReadLine();
     possible = PossibleAnswersAfterAttempt(possible, attempt, outcome);
