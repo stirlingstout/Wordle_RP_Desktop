@@ -21,35 +21,28 @@ static bool IsYellow(string attempt, string target, int n) => target.Contains(at
 
 static bool IsAlreadyMarkedGreen(string attempt, int n) => attempt[n] == '*';
 
-
 static string SetAttemptIfYellow(string attempt, string target, int n) =>
     IsAlreadyMarkedGreen(attempt, n) ? attempt : IsYellow(attempt, target, n) ?
 Set(attempt, n, '+') : Set(attempt, n, '_');
-
 
 static string SetTargetIfYellow(string attempt, string target, int n) =>
      IsAlreadyMarkedGreen(attempt, n) ? target : IsYellow(attempt, target, n) ?
 Set(target, target.IndexOf(attempt[n]), '.') : target;
 
-
 static (string, string) EvaluateYellows(string attempt, string target) =>
     Enumerable.Range(0, 5).Aggregate((attempt, target), (a, x) =>
         (SetAttemptIfYellow(a.Item1, a.Item2, x), SetTargetIfYellow(a.Item1, a.Item2, x)));
-
 
 static string MarkAttempt(string attempt, string target) =>
     EvaluateYellows(EvaluateGreens(attempt, target).Item1,
         EvaluateGreens(attempt, target).Item2).Item1;
 
-
 static ImmutableList<string> PossibleAnswersAfterAttempt(
     ImmutableList<string> prior, string attempt, string mark) =>
         prior.Where(w => MarkAttempt(attempt, w) == mark).ToImmutableList();
 
-
 static int WordCountLeftByWorstOutcome(ImmutableList<string> possibleWords, string attempt) =>
     possibleWords.GroupBy(w => MarkAttempt(attempt, w)).Max(g => g.Count());
-
 
 static string BestAttempt(ImmutableList<string> possAnswers, ImmutableList<string> possAttempts) => possAttempts.Select(w => (WordCountLeftByWorstOutcome(possAnswers, w), w)).
            Aggregate((best, x) => (x.Item1 < best.Item1) ||
@@ -78,7 +71,7 @@ while (outcome != "*****")
     Stopwatch sw = new();
     sw.Start();
     var attempt = BestAttempt(possible, ValidWords);
-    sw.Stop(); // 11.98 with all IEnumerable
+    sw.Stop(); // 11.98 with all IEnumerable, less, e.g., 11.65 with ImmutableList
     Console.WriteLine(attempt);
     outcome = Console.ReadLine();
     possible = PossibleAnswersAfterAttempt(possible, attempt, outcome);
