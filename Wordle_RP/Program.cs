@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 static string Set(string word, int n, char newChar) =>
     word.Substring(0, n) + newChar + word.Substring(n + 1);
@@ -60,7 +61,7 @@ Debug.Assert(ValidWords.Count == 2309);
 var ExtraPossibleAnswers = ReadAllWordsFrom("ExtraPossibleAnswers.txt");
 Debug.Assert(ExtraPossibleAnswers.Count == 12546);
 
-    ImmutableList<string> ReadAllWordsFrom(string filename)
+ImmutableList<string> ReadAllWordsFrom(string filename)
 {
     using (var inFile = new System.IO.StreamReader(filename))
     {
@@ -69,12 +70,17 @@ Debug.Assert(ExtraPossibleAnswers.Count == 12546);
 };
 
 // User interface:
-IEnumerable<string> possible = ExtraPossibleAnswers.AddRange(ValidWords);
+IEnumerable<string> possible = ValidWords;
 var outcome = "";
+
 while (outcome != "*****")
 {
+    Stopwatch sw = new();
+    sw.Start();
     var attempt = BestAttempt(possible, ValidWords);
+    sw.Stop();
     Console.WriteLine(attempt);
     outcome = Console.ReadLine();
     possible = PossibleAnswersAfterAttempt(possible, attempt, outcome);
+
 }
