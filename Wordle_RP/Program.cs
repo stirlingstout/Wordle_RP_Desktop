@@ -21,11 +21,11 @@ static bool IsYellow(string attempt, string target, int n) => target.Contains(at
 static bool IsAlreadyMarkedGreen(string attempt, int n) => attempt[n] == '*';
 
 static string SetAttemptIfYellow(string attempt, string target, int n) =>
-    IsAlreadyMarkedGreen(attempt, n) ? attempt : IsYellow(attempt, target, n) ?
+    attempt[n] == '*' ? attempt : IsYellow(attempt, target, n) ?
 Set(attempt, n, '+') : Set(attempt, n, '_');
 
 static string SetTargetIfYellow(string attempt, string target, int n) =>
-     IsAlreadyMarkedGreen(attempt, n) ? target : IsYellow(attempt, target, n) ?
+     attempt[n] == '*' ? target : IsYellow(attempt, target, n) ?
 Set(target, target.IndexOf(attempt[n]), '.') : target;
 
 static (string, string) EvaluateYellows(string attempt, string target) =>
