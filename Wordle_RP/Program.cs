@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 static string Set(string word, int n, char newChar) =>
     word.Substring(0, n) + newChar + word.Substring(n + 1);
@@ -8,10 +7,10 @@ static string Set(string word, int n, char newChar) =>
 static bool IsGreen(string attempt, string target, int n) => target[n] == attempt[n];
 
 static string SetAttemptIfGreen(string attempt, string target, int n) =>
-    IsGreen(attempt, target, n) ? Set(attempt, n, '*') : attempt;
+    target[n] == attempt[n] ? Set(attempt, n, '*') : attempt;
 
 static string SetTargetIfGreen(string attempt, string target, int n) =>
-    IsGreen(attempt, target, n) ? Set(target, n, '.') : target;
+    target[n] == attempt[n] ? Set(target, n, '.') : target;
 
 static (string, string) EvaluateGreens(string attempt, string target) =>
     Enumerable.Range(0, 5).Aggregate((attempt, target), (a, x) =>
