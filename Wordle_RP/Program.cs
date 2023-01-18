@@ -7,10 +7,10 @@ static string Set(string word, int n, char newChar) =>
 static bool IsGreen(string attempt, string target, int n) => target[n] == attempt[n];
 
 static string SetAttemptIfGreen(string attempt, string target, int n) =>
-    IsGreen(attempt, target, n) ? Set(attempt, n, '*') : attempt;
+    target[n] == attempt[n] ? Set(attempt, n, '*') : attempt;
 
 static string SetTargetIfGreen(string attempt, string target, int n) =>
-    IsGreen(attempt, target, n) ? Set(target, n, '.') : target;
+    target[n] == attempt[n] ? Set(target, n, '.') : target;
 
 static (string, string) EvaluateGreens(string attempt, string target) =>
     Enumerable.Range(0, 5).Aggregate((attempt, target), (a, x) =>
@@ -43,7 +43,8 @@ static ImmutableList<string> PossibleAnswersAfterAttempt(
 static int WordCountLeftByWorstOutcome(ImmutableList<string> possibleWords, string attempt) =>
     possibleWords.GroupBy(w => MarkAttempt(attempt, w)).Max(g => g.Count());
 
-static string BestAttempt(ImmutableList<string> possAnswers, ImmutableList<string> possAttempts) => possAttempts.AsParallel().Select(w => (WordCountLeftByWorstOutcome(possAnswers, w), w)).
+static string BestAttempt(ImmutableList<string> possAnswers, ImmutableList<string> possAttempts) => 
+    possAttempts.AsParallel().Select(w => (WordCountLeftByWorstOutcome(possAnswers, w), w)).
            Aggregate((best, x) => (x.Item1 < best.Item1) ||
                (x.Item1 == best.Item1 && possAnswers.Contains(x.Item2)) ? x : best).Item2;
 
